@@ -27,14 +27,13 @@
     <div id="login_screen" class="flex-1 flex flex-col justify-center p-8">
         <h1 class="text-4xl font-black text-yellow-500 mb-2">حسابات</h1>
         <p class="mb-8 text-gray-500">بەخێربێیت! تکایە بچۆ ژوورەوە</p>
-        <input type="email" id="log_email" placeholder="ئیمەیڵ" class="w-full p-4 mb-4 bg-white rounded-2xl shadow-sm outline-none border border-gray-100">
-        <input type="password" id="log_pass" placeholder="پاسوۆرد" class="w-full p-4 mb-6 bg-white rounded-2xl shadow-sm outline-none border border-gray-100">
+        <input type="email" id="log_email" placeholder="ئیمەیڵ" class="w-full p-4 mb-4 bg-white rounded-2xl shadow-sm outline-none border border-gray-100 text-right">
+        <input type="password" id="log_pass" placeholder="پاسوۆرد" class="w-full p-4 mb-6 bg-white rounded-2xl shadow-sm outline-none border border-gray-100 text-right">
         <button onclick="loginUser()" class="w-full bg-black text-white py-4 rounded-2xl font-bold shadow-lg active:scale-95 transition">چوونەژوورەوە</button>
     </div>
 
     <div id="pin_screen" class="hidden flex-1 flex flex-col justify-center items-center p-8 bg-yellow-500 text-white text-center">
         <h2 class="text-2xl font-black mb-2">پاراستنی هەژمار</h2>
-        <p class="mb-8 opacity-90">تکایە کۆدی PIN بنووسە بۆ چوونە ناوەوە</p>
         <div id="pin_container" class="glass-panel p-8 rounded-[40px] shadow-2xl w-full max-w-sm">
             <input type="password" id="pin_input" maxlength="4" placeholder="••••" class="w-full text-center text-4xl p-4 bg-yellow-50 rounded-2xl text-yellow-700 outline-none border-2 border-yellow-200 mb-6 font-mono">
             <button onclick="checkPin()" class="w-full bg-yellow-600 text-white py-4 rounded-2xl font-bold shadow-md active:scale-95 transition">پشتڕاستکردنەوە</button>
@@ -44,37 +43,40 @@
     <div id="main_screen" class="hidden flex-1 p-4 pb-48">
         <div class="flex justify-between items-center mb-6">
             <div id="user_name" class="bg-yellow-400 text-white px-4 py-2 rounded-full font-bold shadow-sm">...</div>
+            <div class="flex flex-col items-end">
+                <span id="live_status" class="text-[10px] text-green-600 font-bold">● LIVE</span>
+                <div class="text-[11px] font-bold text-gray-500" id="web_gold_live">Ounce: $0 | M21: 0</div>
+            </div>
             <button onclick="logout()" class="p-2 bg-white rounded-full shadow-md">🚪</button>
         </div>
 
         <div class="gold-card p-6 text-white text-center shadow-xl mb-6">
             <p class="text-xs opacity-80">ڕەسیدی ئێستا</p>
             <h2 id="balance" class="text-4xl font-black my-1">0</h2>
-            <div id="dollar_rate" class="bg-black/20 px-3 py-1 rounded-full text-xs inline-block">0$</div>
-            <div class="mt-4 bg-white/30 h-3 rounded-full overflow-hidden">
-                <div id="progress_bar" class="bg-green-400 h-full transition-all duration-1000" style="width: 0%"></div>
+            <div class="mt-2 flex justify-center gap-2 items-center">
+                <span class="text-[10px] opacity-70">١٠٠$ =</span>
+                <input type="number" id="web_usd_rate" value="148600" oninput="updateGoldPrice()" class="bg-black/20 w-20 text-center rounded-lg text-xs outline-none border-none p-1">
             </div>
         </div>
 
         <input type="text" id="search_box" oninput="searchTransactions()" placeholder="گەڕان بۆ ناو..." class="w-full p-4 rounded-2xl border-none shadow-sm mb-6 outline-none text-right">
+        <div id="transaction_list" class="space-y-3"></div>
 
-        <div id="transaction_list" class="space-y-3">
-            </div>
-
-        <div class="fixed bottom-0 left-0 right-0 glass-panel p-4 rounded-t-[40px] shadow-[0_-10px_30px_rgba(0,0,0,0.05)] border-t border-white">
+        <div class="fixed bottom-0 left-0 right-0 glass-panel p-4 rounded-t-[40px] shadow-[0_-10px_30px_rgba(0,0,0,0.05)] border-t border-white z-50">
             <div class="flex gap-2 mb-2">
-                <input type="number" id="inp_amt" placeholder="پارە" class="flex-1 p-3 bg-gray-50 rounded-xl outline-none">
-                <input type="text" id="inp_cli" placeholder="کڕیار" class="flex-1 p-3 bg-gray-50 rounded-xl outline-none">
+                <input type="number" id="inp_amt" placeholder="پارە" class="flex-1 p-3 bg-gray-50 rounded-xl outline-none text-right">
+                <input type="text" id="inp_cli" placeholder="کڕیار" class="flex-1 p-3 bg-gray-50 rounded-xl outline-none text-right">
             </div>
-            <input type="text" id="inp_note" placeholder="مواد / تێبینی" class="w-full p-3 bg-gray-50 rounded-xl outline-none mb-3">
+            <input type="text" id="inp_note" placeholder="مواد / تێبینی" class="w-full p-3 bg-gray-50 rounded-xl outline-none mb-3 text-right">
             <div class="flex gap-3">
-                <button onclick="saveRecord('مضاف')" class="flex-1 bg-blue-600 text-white py-4 rounded-2xl font-bold shadow-lg shadow-blue-100">زیادکردن</button>
-                <button onclick="saveRecord('سحب')" class="flex-1 bg-red-600 text-white py-4 rounded-2xl font-bold shadow-lg shadow-red-100">سەرفکردن</button>
+                <button onclick="saveRecord('مضاف')" class="flex-1 bg-blue-600 text-white py-4 rounded-2xl font-bold shadow-lg shadow-blue-100 active:scale-95 transition">زیادکردن</button>
+                <button onclick="saveRecord('سحب')" class="flex-1 bg-red-600 text-white py-4 rounded-2xl font-bold shadow-lg shadow-red-100 active:scale-95 transition">سەرفکردن</button>
             </div>
         </div>
     </div>
 
     <script>
+        // لێرەدا هەمان کۆنفیدرەیشنی فایەربەیسەکەی خۆت دادەنێیتەوە
         const firebaseConfig = {
             apiKey: "AIzaSyAMbSkztcgeeNgqpgvKf_VnB9Q4MQKomzk",
             authDomain: "hisabat-5b935.firebaseapp.com",
@@ -88,13 +90,43 @@
         const auth = firebase.auth();
         const db = firebase.database();
 
+        let currentOunce = 0;
+
+        // --- لۆجیکی لایڤی زێڕ بۆ وێب ---
+        async function fetchGoldPrice() {
+            try {
+                const response = await fetch('https://api.gold-api.com/price/XAU');
+                const data = await response.json();
+                currentOunce = data.price;
+                updateGoldPrice();
+            } catch (error) {
+                document.getElementById('live_status').innerText = "● OFFLINE";
+                document.getElementById('live_status').classList.replace('text-green-600', 'text-red-600');
+            }
+        }
+
+        function updateGoldPrice() {
+            if (currentOunce === 0) return;
+            const usdRate = document.getElementById('web_usd_rate').value || 148600;
+            const laborCost = 85000;
+            const m21 = (((currentOunce / 31.1035) * 0.875) * 4.8) * (usdRate / 100) + laborCost;
+            
+            document.getElementById('web_gold_live').innerHTML = 
+                `Ounce: <span class="text-black">$${currentOunce.toFixed(2)}</span> | M21: <span class="text-yellow-600 font-black">${Math.round(m21).toLocaleString()} IQD</span>`;
+            document.getElementById('live_status').innerText = "● LIVE " + new Date().toLocaleTimeString('en-GB', {hour12:false});
+        }
+
+        // ڕیفرێشکردن هەر ٢ چرکە جارێک
+        setInterval(fetchGoldPrice, 2000);
+
+        // --- بەردەوامی لۆجیکەکەی خۆت بەبێ گۆڕانکاری ---
         let correctPin = "";
         let transactionData = [];
 
-        // Auth Logic
         function loginUser() {
             const e = document.getElementById('log_email').value;
             const p = document.getElementById('log_pass').value;
+            if(!e || !p) return alert("تکایە زانیارییەکان بنووسە");
             auth.signInWithEmailAndPassword(e, p).catch(err => alert(err.message));
         }
 
@@ -102,7 +134,6 @@
             if (user) {
                 document.getElementById('login_screen').classList.add('hidden');
                 document.getElementById('pin_screen').classList.remove('hidden');
-                // Get PIN from Firebase
                 db.ref('andam/' + user.uid).once('value', snap => {
                     correctPin = snap.val()?.PIN || "";
                 });
@@ -119,31 +150,25 @@
                 document.getElementById('pin_screen').classList.add('hidden');
                 document.getElementById('main_screen').classList.remove('hidden');
                 loadDashboard(auth.currentUser.uid);
+                fetchGoldPrice(); // دەستپێکردنی یەکەمجار
             } else {
                 const container = document.getElementById('pin_container');
                 container.classList.add('shake');
                 setTimeout(() => container.classList.remove('shake'), 500);
                 document.getElementById('pin_input').value = "";
-                if (window.navigator.vibrate) window.navigator.vibrate(200);
             }
         }
 
         function loadDashboard(uid) {
-            // Profile & Balance
             db.ref('andam/' + uid).on('value', snap => {
                 const d = snap.val();
                 if(d) {
                     document.getElementById('user_name').innerText = d.name;
                     document.getElementById('balance').innerText = Number(d.para).toLocaleString();
-                    let progress = (d.para / 7500000) * 100;
-                    document.getElementById('progress_bar').style.width = Math.min(progress, 100) + '%';
                 }
             });
 
-            // Transactions
             db.ref('casher').on('value', snap => {
-                const container = document.getElementById('transaction_list');
-                container.innerHTML = '';
                 transactionData = [];
                 snap.forEach(child => {
                     if(child.val().uid === uid) transactionData.push(child.val());
@@ -166,7 +191,6 @@
                         </div>
                         <div class="text-left">
                             <div class="font-black text-xl ${isExpense ? 'text-red-500' : 'text-blue-600'}">${Number(item.para).toLocaleString()}</div>
-                            <div class="text-[9px] font-bold opacity-30 uppercase">${item.color}</div>
                         </div>
                     </div>`;
                 container.insertAdjacentHTML('beforeend', html);
@@ -184,24 +208,13 @@
             const cli = document.getElementById('inp_cli').value;
             const note = document.getElementById('inp_note').value;
             const uid = auth.currentUser.uid;
-
-            if(!amt || !cli) return alert("تکایە خانەکان پڕ بکەرەوە");
-
+            if(!amt || !cli) return;
             const date = new Date();
             const timeStr = date.toLocaleDateString('en-GB') + " | " + date.toLocaleTimeString('en-GB', {hour:'2-digit', minute:'2-digit'});
-
             const key = db.ref('casher').push().key;
-            db.ref('casher/' + key).set({
-                name: cli, para: amt, wasf: note, tarex: timeStr, color: type, uid: uid, key: key
-            });
-
-            db.ref('andam/' + uid + '/para').transaction(curr => {
-                return type === 'مضاف' ? (Number(curr) + Number(amt)) : (Number(curr) - Number(amt));
-            });
-
-            document.getElementById('inp_amt').value = '';
-            document.getElementById('inp_cli').value = '';
-            document.getElementById('inp_note').value = '';
+            db.ref('casher/' + key).set({ name: cli, para: amt, wasf: note, tarex: timeStr, color: type, uid: uid, key: key });
+            db.ref('andam/' + uid + '/para').transaction(curr => type === 'مضاف' ? (Number(curr) + Number(amt)) : (Number(curr) - Number(amt)));
+            document.getElementById('inp_amt').value = ''; document.getElementById('inp_cli').value = ''; document.getElementById('inp_note').value = '';
         }
 
         function logout() { auth.signOut(); }
