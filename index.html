@@ -63,7 +63,7 @@
                         <p id="menu_ounce" class="text-sm font-black text-gray-800">$0.00</p>
                     </div>
                     <div class="bg-blue-50 p-3 rounded-2xl">
-                        <p class="text-[9px] text-blue-600 font-bold">ئۆنسەی زێو</p>
+                        <p class="text-[9px] text-blue-600 font-bold">ئۆنسەی زیو</p>
                         <p id="menu_silver" class="text-sm font-black text-gray-800">$0.00</p>
                     </div>
                     <div class="bg-gray-50 p-3 rounded-2xl col-span-2 flex justify-between items-center">
@@ -80,9 +80,14 @@
                     </div>
                     <div class="bg-indigo-50 p-3 rounded-2xl col-span-2 flex justify-between items-center">
                         <span id="msilver_val" class="font-black text-indigo-700 text-xs">0</span>
-                        <span class="text-[10px] text-indigo-400 font-bold">مسقاڵی زێو</span>
+                        <span class="text-[10px] text-indigo-400 font-bold">مسقاڵی زیو</span>
                     </div>
                 </div>
+                
+                <button onclick="copyPricesForTelegram()" class="w-full mt-4 bg-green-600 text-white py-3 rounded-2xl font-bold text-xs shadow-md active:scale-95 transition flex items-center justify-center gap-2">
+                    📋 کۆپی بۆ تێلیگرام
+                </button>
+
                 <p class="text-[8px] text-center text-gray-300 mt-4 italic">نوێبوونەوەی خێرا بە چرکە</p>
             </div>
         </div>
@@ -93,7 +98,7 @@
             <h2 id="balance" class="text-4xl font-black my-1 tracking-tight">0</h2>
             <div class="mt-2 flex justify-center gap-2 items-center bg-black/10 py-1 px-4 rounded-full inline-flex">
                 <span class="text-[10px] opacity-70">١٠٠$ =</span>
-                <input type="number" id="web_usd_rate" value="148600" oninput="calculateAllPrices()" class="bg-transparent w-16 text-center text-xs font-bold outline-none border-none">
+                <input type="number" id="web_usd_rate" value="150000" oninput="calculateAllPrices()" class="bg-transparent w-16 text-center text-xs font-bold outline-none border-none">
             </div>
         </div>
 
@@ -132,20 +137,17 @@
         let lastOunce = 0;
         let currentSilverOunce = 0;
 
-        // --- Live Price Logic ---
         function togglePriceMenu() {
             document.getElementById('price_menu').classList.toggle('active');
         }
 
         async function fetchPrices() {
             try {
-                // Fetch Gold
                 const gRes = await fetch('https://api.gold-api.com/price/XAU');
                 const gData = await gRes.json();
                 lastOunce = currentOunce;
                 currentOunce = gData.price;
 
-                // Fetch Silver
                 const sRes = await fetch('https://api.gold-api.com/price/XAG');
                 const sData = await sRes.json();
                 currentSilverOunce = sData.price;
@@ -168,12 +170,11 @@
 
         function calculateAllPrices() {
             if (currentOunce === 0) return;
-            const usd = document.getElementById('web_usd_rate').value || 148600;
+            const usd = document.getElementById('web_usd_rate').value || 150000;
             const usdFactor = usd / 100;
             
-            // Formulas based on Kurdish market standards (4.8g per Misqal)
             const g24 = (currentOunce / 31.1035);
-            const m24 = (g24 * 4.8) * usdFactor + 40000; // 24k has lower labor cost in raw
+            const m24 = (g24 * 4.8) * usdFactor + 40000; 
             const m21 = (g24 * 0.875 * 4.8) * usdFactor + 85000;
             const m18 = (g24 * 0.750 * 4.8) * usdFactor + 95000;
             const mSilver = (currentSilverOunce / 31.1035 * 4.8) * usdFactor + 15000;
@@ -188,9 +189,29 @@
             document.getElementById('msilver_val').innerText = Math.round(mSilver).toLocaleString() + " IQD";
         }
 
-        setInterval(fetchPrices, 2000); // Super fast refresh (2 seconds)
+        // --- فەنکشنی کۆپی کردن بەو ستایلەی خۆت ویستت ---
+        function copyPricesForTelegram() {
+            const ounce = document.getElementById('menu_ounce').innerText;
+            const silverOunce = document.getElementById('menu_silver').innerText;
+            const m24 = document.getElementById('m24_val').innerText;
+            const m21 = document.getElementById('m21_val').innerText;
+            const m18 = document.getElementById('m18_val').innerText;
+            const mSilver = document.getElementById('msilver_val').innerText;
+            
+            const date = new Date().toLocaleDateString('en-GB');
+            const time = new Date().toLocaleTimeString('en-GB', {hour:'2-digit', minute:'2-digit'});
+            
+            const trend = currentOunce >= lastOunce ? "🟢 🔺" : "🔴 🔻";
 
-        // --- Original Logic (Firebase, PIN, etc.) ---
+            const text = `✨ **GOLD & SILVER | زێڕ و زیو** ✨\n📊 **دواین گۆڕانکارییەکانی بازاڕ**\n\n─── ─── ─── ─── ───\n**🌍 【 بۆرسەی جیهانی 】**\n🟡 ئۆنسەی زێڕ ⇛ \`${ounce}\` ${trend}\n⚪️ ئۆنسەی زیو ⇛ \`${silverOunce}\` ${trend}\n\n**🇮🇶 【 نرخـی زێڕی عێـراقی 】**\n💰 مسقاڵی ٢٤ ⇛ \`${m24}\` 🟢 🔺\n⚜️ مسقاڵی ٢١ ⇛ \`${m21}\` 🟢 🔺\n✨ مسقاڵی ١٨ ⇛ \`${m18}\` 🟢 🔺\n\n**💿 【 نرخـی زیـوی خـاو 】**\n🔘 مسقاڵی زیو ⇛ \`${mSilver}\` 🟢 🔺\n─── ─── ─── ─── ───\n\n⚡️ **نوێبوونەوەی خێرا بە چرکە**\n📅 ${date} | ⏰ ${time}\n\n💎 **بۆ بینینی نرخەکان سەردانمان بکەن:**\n📢 @zerwzew1`;
+
+            navigator.clipboard.writeText(text).then(() => {
+                alert("نوێترین نرخ بەو ستایلەی ویستت کۆپی بوو!");
+            }).catch(err => alert("کۆپی نەکرا، تکایە دووبارە هەوڵ بدەوە"));
+        }
+
+        setInterval(fetchPrices, 2000);
+
         let correctPin = "";
         let transactionData = [];
 
