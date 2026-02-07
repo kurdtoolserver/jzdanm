@@ -21,34 +21,34 @@
         @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
     </style>
 </head>
-<body class="flex flex-col min-h-screen">
+<body class="flex flex-col min-h-screen text-right">
 
-    <div id="login_screen" class="flex-1 flex flex-col justify-center p-8 text-right">
+    <div id="login_screen" class="flex-1 flex flex-col justify-center p-8">
         <h1 class="text-4xl font-black text-yellow-500 mb-2">حسابات</h1>
         <p class="mb-8 text-gray-500">بەخێربێیت! تکایە بچۆ ژوورەوە</p>
         <input type="email" id="log_email" placeholder="ئیمەیڵ" class="w-full p-4 mb-4 bg-white rounded-2xl shadow-sm outline-none border border-gray-100 text-right">
         <input type="password" id="log_pass" placeholder="پاسوۆرد" class="w-full p-4 mb-6 bg-white rounded-2xl shadow-sm outline-none border border-gray-100 text-right">
-        <button onclick="loginUser()" class="w-full bg-black text-white py-4 rounded-2xl font-bold active:scale-95 transition">چوونەژوورەوە</button>
+        <button onclick="loginUser()" class="w-full bg-black text-white py-4 rounded-2xl font-bold active:scale-95 transition text-center">چوونەژوورەوە</button>
     </div>
 
     <div id="pin_screen" class="hidden flex-1 flex flex-col justify-center items-center p-8 bg-yellow-500 text-white text-center">
-        <h2 class="text-2xl font-black mb-2">پاراستنی هەژمار</h2>
+        <h2 class="text-2xl font-black mb-2 text-center">پاراستنی هەژمار</h2>
         <div id="pin_container" class="glass-panel p-8 rounded-[40px] shadow-2xl w-full max-sm:max-w-xs">
-            <input type="password" id="pin_input" maxlength="4" placeholder="••••" class="w-full text-center text-4xl p-4 bg-yellow-50 rounded-2xl text-yellow-700 outline-none border-2 border-yellow-200 mb-6 font-mono text-right">
-            <button onclick="checkPin()" class="w-full bg-yellow-600 text-white py-4 rounded-2xl font-bold shadow-md active:scale-95 transition">پشتڕاستکردنەوە</button>
+            <input type="password" id="pin_input" maxlength="4" placeholder="••••" class="w-full text-center text-4xl p-4 bg-yellow-50 rounded-2xl text-yellow-700 outline-none border-2 border-yellow-200 mb-6 font-mono">
+            <button onclick="checkPin()" class="w-full bg-yellow-600 text-white py-4 rounded-2xl font-bold shadow-md active:scale-95 transition text-center">پشتڕاستکردنەوە</button>
         </div>
     </div>
 
     <div id="main_screen" class="hidden flex-1 p-4 pb-56">
-        <div class="flex justify-between items-center mb-6 relative text-right">
-            <div id="user_name" class="bg-yellow-400 text-white px-3 py-1 rounded-xl text-[10px] font-black shadow-sm">...</div>
+        <div class="flex justify-between items-center mb-6 relative">
+            <div id="user_name" class="bg-yellow-400 text-white px-3 py-1 rounded-xl text-[10px] font-black shadow-sm text-center">...</div>
             
             <div class="flex gap-2">
-                <button onclick="fetchPrices()" class="p-2 bg-blue-500 text-white rounded-xl shadow-md active:rotate-180 transition-all duration-500">🔄</button>
+                <button onclick="fetchPrices()" class="p-2 bg-blue-500 text-white rounded-xl shadow-md active:rotate-180 transition-all duration-500 text-center">🔄</button>
                 
                 <div onclick="togglePriceMenu()" class="cursor-pointer bg-white px-3 py-1 rounded-2xl shadow-md flex items-center gap-2 border border-yellow-100 active:scale-95 transition">
                     <span id="trend_icon" class="text-xs">--</span>
-                    <div class="flex flex-col items-center">
+                    <div class="flex flex-col items-center text-center">
                         <span class="text-[8px] text-gray-400 font-bold uppercase tracking-tighter">Live Price</span>
                         <span id="top_price_display" class="text-[11px] font-black text-gray-700">$0.00</span>
                     </div>
@@ -56,10 +56,10 @@
                 </div>
             </div>
             
-            <button onclick="logout()" class="p-2 bg-white rounded-full shadow-md">🚪</button>
+            <button onclick="logout()" class="p-2 bg-white rounded-full shadow-md text-center">🚪</button>
 
             <div id="price_menu" class="price-menu absolute top-12 left-0 right-0 z-[100] glass-panel rounded-[30px] p-5 shadow-2xl">
-                <h3 class="text-center text-[10px] font-bold text-gray-400 mb-4 uppercase text-center">نرخەکانی بۆرسە و بازاڕ</h3>
+                <h3 class="text-center text-[10px] font-bold text-gray-400 mb-4 uppercase">نرخەکانی بۆرسە و بازاڕ</h3>
                 
                 <div class="grid grid-cols-2 gap-3 text-right">
                     <div class="bg-yellow-50 p-3 rounded-2xl">
@@ -116,8 +116,8 @@
                 <input type="number" id="inp_amt" placeholder="پارە" class="flex-1 p-3 bg-gray-50 rounded-xl outline-none text-right text-sm">
                 <input type="text" id="inp_cli" placeholder="کڕیار" class="flex-1 p-3 bg-gray-50 rounded-xl outline-none text-right text-sm">
             </div>
-            <input type="text" id="inp_note" placeholder="مواد / تێبینی" class="w-full p-3 bg-gray-50 rounded-xl outline-none mb-3 text-right text-sm">
-            <div class="flex gap-3">
+            <input type="text" id="inp_note" placeholder="مواد / تێبینی" class="w-full p-3 bg-gray-50 rounded-xl outline-none mb-3 text-right text-sm text-right">
+            <div class="flex gap-3 text-center">
                 <button onclick="saveRecord('مضاف')" class="flex-1 bg-blue-600 text-white py-4 rounded-2xl font-bold active:scale-95 transition">زیادکردن</button>
                 <button onclick="saveRecord('سحب')" class="flex-1 bg-red-600 text-white py-4 rounded-2xl font-bold active:scale-95 transition">سەرفکردن</button>
             </div>
@@ -169,11 +169,11 @@
             
             const gBase = (currentOunce / 31.1035) * 4.8 * usdFactor;
             
-            // چاککردنی حەقدەستەکان - لێرە ٣٠٠٠ لە عەیار ٢١ کەمکرایەوە
-            const m24 = gBase + 45000;
-            const m22 = (gBase * 0.916) + 70000; 
-            const m21 = (gBase * 0.875) + 85000; // کەمکرایەوە بۆ ٨٥٠٠٠
-            const m18 = (gBase * 0.750) + 98000; 
+            // ڕێکخستنی نرخەکان ڕێک وەک ئەو کەناڵەی داوات کردبوو (بەپێی حەقدەستی بازاڕ)
+            const m24 = gBase + 94000;
+            const m22 = (gBase * 0.916) + 84000; 
+            const m21 = (gBase * 0.875) + 87000; 
+            const m18 = (gBase * 0.750) + 84000; 
             const mSilver = (currentSilverOunce / 31.1035 * 4.8) * usdFactor + 15000;
 
             document.getElementById('top_price_display').innerText = "$" + currentOunce.toFixed(2);
@@ -209,7 +209,7 @@
             const text = `✨ **GOLD & SILVER | زێڕ و زیو** ✨\n📊 **دواین گۆڕانکارییەکانی بازاڕ**\n\n─── ─── ─── ─── ───\n**🌍 【 بۆرسەی جیهانی 】**\n🟡 ئۆنسەی زێڕ ⇛ \`${ounce}\` ${trend}\n⚪️ ئۆنسەی زیو ⇛ \`${silverOunce}\` ${trend}\n\n**🇮🇶 【 نرخـی زێڕی عێـراقی 】**\n💰 مسقاڵی ٢٤ ⇛ \`${m24}\` 🟢\n🔶 مسقاڵی ٢٢ ⇛ \`${m22}\` 🟢\n⚜️ مسقاڵی ٢١ ⇛ \`${m21}\` 🟢\n✨ مسقاڵی ١٨ ⇛ \`${m18}\` 🟢\n\n**💿 【 نرخـی زیـوی خـاو 】**\n🔘 مسقاڵی زیو ⇛ \`${mSilver}\` 🟢\n─── ─── ─── ─── ───\n\n⚡️ **نوێبوونەوەی خێرا بە چرکە**\n📅 ${baghdadDate} | ⏰ ${baghdadTime}\n\n📢 @zerwzew1`;
 
             navigator.clipboard.writeText(text).then(() => {
-                alert("نرخەکان بە کاتی بەغداد کۆپی بوون!");
+                alert("نرخەکان کۆپی بوون!");
             });
         }
 
@@ -224,9 +224,9 @@
             }
         }
 
-        setInterval(fetchPrices, 10000); // ئۆتۆماتیک هەموو ١٠ چرکە
+        setInterval(fetchPrices, 10000); 
 
-        // Firebase & Business Logic
+        // Firebase & Logic (No Changes)
         let correctPin = "";
         let transactionData = [];
 
@@ -292,7 +292,7 @@
                             <p class="text-[9px] text-gray-400">${item.tarex}</p>
                             <p class="text-[11px] text-gray-500 mt-1">${item.wasf}</p>
                         </div>
-                        <div class="text-left font-black text-sm ${isExpense ? 'text-red-500' : 'text-blue-600'}">
+                        <div class="text-left font-black text-sm ${isExpense ? 'text-red-500' : 'text-blue-600'} text-left">
                             ${Number(item.para).toLocaleString()}
                         </div>
                     </div>`;
